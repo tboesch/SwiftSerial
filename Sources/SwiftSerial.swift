@@ -267,7 +267,7 @@ public class SerialPort {
                             useHardwareFlowControl: Bool = false,
                             useSoftwareFlowControl: Bool = false,
                             processOutput: Bool = false) {
-        
+
         guard let fileDescriptor = fileDescriptor else {
             return
         }
@@ -425,7 +425,7 @@ extension SerialPort {
 
             if bytesRead > 0 {
                 let character = CChar(buffer[0])
-                
+
                 if character == terminator {
                     break
                 } else {
@@ -448,14 +448,14 @@ extension SerialPort {
 
     public func readByte() throws -> UInt8 {
         let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 1)
-        
+
         defer {
             buffer.deallocate(capacity: 1)
         }
-        
+
         while true {
             let bytesRead = try readBytes(into: buffer, size: 1)
-            
+
             if bytesRead > 0 {
                 return buffer[0]
             }
@@ -463,11 +463,11 @@ extension SerialPort {
     }
 
     public func readChar() throws -> UnicodeScalar {
-        let byteRead = readByte()
-        let character = UnicodeScalar(buffer[0])
-        return character     
+        let byteRead = try readByte()
+        let character = UnicodeScalar(byteRead)
+        return character
     }
-   
+
 }
 
 // MARK: Transmitting
